@@ -1,16 +1,16 @@
 {
-    "name": ":vendor_name/:package_name",
-    "description": ":package_description",
+    "name": "narcisonunez/laravel-actionable-model",
+    "description": "Allow actions in your laravel model",
     "keywords": [
-        ":vendor_name",
-        ":package_name"
+        "narcisonunez",
+        "laravel-actionable-model"
     ],
-    "homepage": "https://github.com/:vendor_name/:package_name",
+    "homepage": "https://github.com/narcisonunez/laravel-actionable-model",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
+            "name": "Narciso Nunez",
+            "email": "narciso.arias21@gmail.com",
             "role": "Developer"
         }
     ],
@@ -27,13 +27,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src",
-            "Spatie\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Narcisonunez\\LaravelActionableModel\\": "src",
+            "Narcisonunez\\LaravelActionableModel\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Narcisonunez\\LaravelActionableModel\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -47,10 +47,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
+                "Narcisonunez\\LaravelActionableModel\\LaravelActionableModelServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
+                "LaravelActionableModel": "Narcisonunez\\LaravelActionableModel\\LaravelActionableModelFacade"
             }
         }
     },

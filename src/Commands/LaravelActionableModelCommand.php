@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Skeleton\Commands;
+namespace Narcisonunez\LaravelActionableModel\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelActionableModelCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-actionable-model';
 
     public $description = 'My command';
 
