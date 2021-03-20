@@ -2,6 +2,8 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-class LaravelActionableModel
+use Illuminate\Database\Eloquent\Model;
+
+class LaravelActionableModel extends Model
 {
 }
