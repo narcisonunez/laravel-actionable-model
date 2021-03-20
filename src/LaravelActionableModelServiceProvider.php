@@ -2,9 +2,9 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
+use Narcisonunez\LaravelActionableModel\Commands\LaravelActionableModelCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Narcisonunez\LaravelActionableModel\Commands\LaravelActionableModelCommand;
 
 class LaravelActionableModelServiceProvider extends PackageServiceProvider
 {
