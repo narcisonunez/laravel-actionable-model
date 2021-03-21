@@ -6,15 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/narcisonunez/laravel-actionable-model.svg?style=flat-square)](https://packagist.org/packages/narcisonunez/laravel-actionable-model)
 
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-laravel-actionable-model-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-laravel-actionable-model-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Update: Description
 
 ## Installation
 
@@ -31,23 +23,115 @@ php artisan vendor:publish --provider="Narcisonunez\LaravelActionableModel\Larav
 php artisan migrate
 ```
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="Narcisonunez\LaravelActionableModel\LaravelActionableModelServiceProvider" --tag="actionable-model-config"
-```
+## Basic Setup
 
-This is the contents of the published config file:
+### Register your actions
 
-```php
-return [
-];
-```
-
-## Usage
+Add your action in your `AppServiceProvider`
 
 ```php
-$laravel-actionable-model = new Narcisonunez\LaravelActionableModel();
-echo $laravel-actionable-model->echoPhrase('Hello, Narcisonunez!');
+use Narcisonunez\LaravelActionableModel\Facades\ActionableActionTypes;
+use App\ActionTypes\KudosActionType;
+
+ActionableActionTypes::register([
+    'like',
+    'kudos' => KudosActionType::class,
+    'celebrate'
+]);
+``` 
+You can implement your own class extending `ActionableTypeRecord` to add more logic to your records.   
+Ex. `icon` method to get that specific action type icon.
+Now, Any `kudos` action will have a method named `icon`.  
+
+Your actions will be used as dynamic method calls. See below.
+
+### Add Traits to your Eloquent Models
+A model that can perform actions you need to include:
+
+```php
+// Imports 
+class User extends Authenticatable
+{
+    use ActionableModel;
+    use CanPerformActions;
+    ...
+}
+```
+
+The model that can receive the actions must implement `CanBeActionable`
+```php
+...
+use Narcisonunez\LaravelActionableModel\Traits\ActionableModel;
+
+class Cause extends Model implements CanBeActionable
+{
+    use ActionableModel;
+    ...
+}
+```
+
+## Basic Usage
+
+### Perform an action
+```php
+// You will use your actions as methods call.
+$user->performActionOn($cause)->like();
+$user->performActionOn($cause)->kudos();
+$user->performActionOn($cause)->celebrate();
+```
+
+### Check if the action was already made
+```php
+// returns False or an ActionableTypeRecord
+$user->hasPerformedAction('like')->on($cause);
+```
+
+### Toggle your actions
+```php
+// remove if exists the action, otherwise creates a new like
+$user->performActionOn($cause)->toggle('like');
+// OR
+// toggleACTIONTYPE
+$user->performActionOn($cause)->toggleLike(); 
+$user->performActionOn($cause)->toggleKudos(); 
+$user->performActionOn($cause)->toggleCelebrate(); 
+```
+
+### Manually delete an action (See Toggle above)
+```php
+if ($action  = $user->hasPerformedAction('like')->on($cause) ) {
+    $action->delete();
+}
+```
+
+### Get all the actions
+```php
+$user->actions()->get();
+$user->actions()->given()->get();
+$user->actions()->received()->get();
+$user->actions()->ofType('like')->get();
+$cause->actions()->by($user)->ofType('like')->get();
+$cause->actions()->by($user)->ofType('like')->count();
+```
+
+#### - Available methods -
+| Method | Description |
+| --- | --- |
+| get | Returns a collection of `ActionableTypeRecord` |
+| count | Returns the number of records |
+| given | Filters all the records where the current model performed the actions |
+| received | Filters all the records where the current model received the actions |
+| ofType | Filters by the actionType|
+| by | Filters all the actions in the current model where the model passed to this method performed the action |
+
+### Actionable Record
+The methods above will return a collection of `ActionableRecord`.  
+The access the owner or the actionable models, you can do it like this:
+```php
+$actionRecord = $user->actions()->ofType('like')->get()->first();
+
+$actionRecord->owner; // The model that performed the action
+$actionRecord->actionable; // The model that received the action
 ```
 
 ## Testing
