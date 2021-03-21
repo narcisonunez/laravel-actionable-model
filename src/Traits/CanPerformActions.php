@@ -31,8 +31,7 @@ trait CanPerformActions
     public function hasPerformedAction(string $action)
     {
         $actionHandler = new OwnerActionHandler();
-        $actionHandler->setOwner($this);
-        $actionHandler->setAction($action);
+        $actionHandler->setOwner($this)->setAction($action);
 
         return $actionHandler;
     }

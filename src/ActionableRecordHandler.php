@@ -26,6 +26,11 @@ class ActionableRecordHandler
      */
     protected $actionableActionTypes;
 
+    /**
+     * @var bool
+     */
+    protected bool $requestAll = true;
+
     public function __construct($target)
     {
         $this->target = $target;
@@ -39,6 +44,7 @@ class ActionableRecordHandler
      */
     public function by($owner) : self
     {
+        $this->requestAll = false;
         $this->recordsQuery->where('performed_by_type',  $owner::class)
             ->where('performed_by_id',  $owner->id);
         return $this;
@@ -60,6 +66,7 @@ class ActionableRecordHandler
      */
     public function received(): self
     {
+        $this->requestAll = false;
         $this->recordsQuery->where('actionable_type',  $this->target::class)
             ->where('actionable_id',  $this->target->id);
 
@@ -71,6 +78,7 @@ class ActionableRecordHandler
      */
     public function given(): self
     {
+        $this->requestAll = false;
         $this->recordsQuery->where('performed_by_type',  $this->target::class)
             ->where('performed_by_id',  $this->target->id);
 
@@ -82,6 +90,7 @@ class ActionableRecordHandler
      */
     public function get() : Collection
     {
+        $this->prepareQuery();
         return $this->recordsQuery->get()
             ->map(function (ActionableRecord $record) {
                 $implementation = $this->actionableActionTypes->get($record->action);
@@ -95,6 +104,22 @@ class ActionableRecordHandler
      */
     public function count() : int
     {
+        $this->prepareQuery();
         return $this->recordsQuery->count();
+    }
+
+    /**
+     * Get all the records for an specific model
+     */
+    private function prepareQuery()
+    {
+        if ($this->requestAll) {
+            $this->recordsQuery->where('performed_by_type',  $this->target::class)
+                ->where('performed_by_id',  $this->target->id)
+                ->orWhere(function ($query){
+                    $query->where('actionable_type',  $this->target::class)
+                        ->where('actionable_id',  $this->target->id);
+                });
+        }
     }
 }

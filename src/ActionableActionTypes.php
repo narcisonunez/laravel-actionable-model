@@ -7,6 +7,9 @@ use Exception;
 
 class ActionableActionTypes
 {
+    /**
+     * @var array 
+     */
     public array $actions;
 
     /**
