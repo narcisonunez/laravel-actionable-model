@@ -55,7 +55,7 @@ class OwnerActionHandler
             ->where('action', $this->action)
             ->first();
 
-        return !$record ? false : (new $implementation($record));
+        return ! $record ? false : (new $implementation($record));
     }
 
     /**
@@ -86,6 +86,7 @@ class OwnerActionHandler
         if ($records->isNotEmpty()) {
             $recordsCount = $records->count();
             $records->map->delete();
+
             return $recordsCount;
         }
 
@@ -98,11 +99,12 @@ class OwnerActionHandler
      * @return int|ActionableRecord
      * @throws Exception
      */
-    public function __call(string $name, array $arguments) : ActionableRecord|int
+    public function __call(string $name, array $arguments) : ActionableRecord | int
     {
         if (Str::startsWith($name, 'toggle')) {
             $name = Str::lower(Str::replaceFirst('toggle', '', $name));
             $this->validateAction($name);
+
             return $this->toggle($name);
         }
 
@@ -130,7 +132,7 @@ class OwnerActionHandler
      * @param $action
      * @return Collection|null
      */
-    public function getRecordsForAction($action) : Collection|null
+    public function getRecordsForAction($action) : Collection | null
     {
         return ActionableRecord::where('performed_by_type', $this->owner::class)
             ->where('performed_by_id', $this->owner->id)
@@ -146,7 +148,7 @@ class OwnerActionHandler
      */
     public function validateAction(string $name): void
     {
-        if (!$this->actionableActionTypes->exists($name)) {
+        if (! $this->actionableActionTypes->exists($name)) {
             throw new Exception("Invalid Action Type: $name");
         }
     }

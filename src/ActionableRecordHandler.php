@@ -92,6 +92,7 @@ class ActionableRecordHandler
     public function get() : Collection
     {
         $this->prepareQuery();
+
         return $this->recordsQuery->get()
             ->map(function (ActionableRecord $record) {
                 $implementation = $this->actionableActionTypes->get($record->action);
@@ -106,6 +107,7 @@ class ActionableRecordHandler
     public function count() : int
     {
         $this->prepareQuery();
+
         return $this->recordsQuery->count();
     }
 
@@ -117,7 +119,7 @@ class ActionableRecordHandler
         if ($this->requestAll) {
             $this->recordsQuery->where('performed_by_type',  $this->target::class)
                 ->where('performed_by_id',  $this->target->id)
-                ->orWhere(function ($query){
+                ->orWhere(function ($query) {
                     $query->where('actionable_type',  $this->target::class)
                         ->where('actionable_id',  $this->target->id);
                 });
