@@ -83,11 +83,9 @@ class ActionableRecordHandler
     {
         return $this->recordsQuery->get()
             ->map(function (ActionableRecord $record) {
-                if($implementation = $this->actionableActionTypes->get($record->action)) {
-                    return new $implementation($record);
-                }
+                $implementation = $this->actionableActionTypes->get($record->action);
 
-                return $record;
+                return new $implementation($record);
         });
     }
 

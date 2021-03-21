@@ -45,14 +45,10 @@ class ActionableActionTypes
 
     /**
      * @param string $action
-     * @return bool|string
+     * @return string
      */
-    public function get(string $action) : bool|string
+    public function get(string $action) : string
     {
-        if (! isset($this->actions[$action])) {
-            return false;
-        }
-
         return $this->actions[$action];
     }
 
