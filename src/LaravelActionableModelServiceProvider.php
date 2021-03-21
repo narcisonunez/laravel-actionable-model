@@ -17,9 +17,10 @@ class LaravelActionableModelServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-actionable-model')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel_actionable_model_table')
-            ->hasCommand(LaravelActionableModelCommand::class);
+            ->hasMigration('create_laravel_actionable_model_table');
+
+        $this->app->singleton(ActionableActionTypes::class, function () {
+            return new ActionableActionTypes();
+        });
     }
 }
