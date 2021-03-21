@@ -4,21 +4,26 @@
 namespace Narcisonunez\LaravelActionableModel;
 
 
+use Exception;
+
 class ActionableActionTypes
 {
     public array $actions;
 
     /**
      * @param array $actions
+     * @throws Exception
      */
     public function register(array $actions)
     {
         $parsedActions = [];
         foreach ($actions as $key => $implementation) {
             if (is_numeric($key)) {
-                $parsedActions[$implementation] = ''; // TODO Default class implementation
+                $parsedActions[$implementation] = ActionableTypeRecord::class;
                 continue;
             }
+
+            $this->validateImplementation($implementation);
 
             $parsedActions[$key] = $implementation;
         }
@@ -29,9 +34,9 @@ class ActionableActionTypes
      * @param string $action
      * @return bool
      */
-    public function exists(string $action)
+    public function exists(string $action) : bool
     {
-        if (! in_array($action, $this->actions)) {
+        if (! isset($this->actions[$action])) {
             return false;
         }
 
@@ -40,11 +45,11 @@ class ActionableActionTypes
 
     /**
      * @param string $action
-     * @return bool|mixed
+     * @return bool|string
      */
-    public function get(string $action)
+    public function get(string $action) : bool|string
     {
-        if (! in_array($action, $this->actions)) {
+        if (! isset($this->actions[$action])) {
             return false;
         }
 
@@ -57,5 +62,20 @@ class ActionableActionTypes
     public function actions()
     {
         return $this->actions;
+    }
+
+    /**
+     * @param mixed $implementation
+     * @throws Exception
+     */
+    private function validateImplementation(mixed $implementation): void
+    {
+        if (!class_exists($implementation)) {
+            throw new Exception("Class not found. $implementation");
+        }
+
+        if (!is_subclass_of($implementation, ActionableTypeRecord::class)) {
+            throw new Exception('The implementation should be an instance of ActionableTypeRecord');
+        }
     }
 }
