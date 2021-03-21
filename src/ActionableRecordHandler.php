@@ -47,6 +47,7 @@ class ActionableRecordHandler
         $this->requestAll = false;
         $this->recordsQuery->where('performed_by_type',  $owner::class)
             ->where('performed_by_id',  $owner->id);
+
         return $this;
     }
 
