@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +51,7 @@ class OwnerActionHandler
             ->where('actionable_type',  $actionable::class)
             ->where('actionable_id',  $actionable->id)
             ->first();
+
         return ! $record ?: (new $implementation($record));
     }
 
@@ -96,7 +96,7 @@ class OwnerActionHandler
             'owner_id' => $this->owner->id,
             'actionable_type' => $this->actionable::class,
             'actionable_id' => $this->actionable->id,
-            'action' => $name
+            'action' => $name,
         ]);
     }
 }

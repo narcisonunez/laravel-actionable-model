@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel\Traits;
 
-
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Narcisonunez\LaravelActionableModel\Contracts\CanBeActionable;
@@ -21,6 +20,7 @@ trait CanPerformActions
         if (! $actionable instanceof CanBeActionable) {
             throw new Exception("Model " . get_class($actionable) . " " . CanBeActionable::class);
         }
+
         return (new OwnerActionHandler($this, $actionable));
     }
 
@@ -29,6 +29,7 @@ trait CanPerformActions
         $actionHandler = new OwnerActionHandler();
         $actionHandler->setOwner($this);
         $actionHandler->setAction($action);
+
         return $actionHandler;
     }
 }

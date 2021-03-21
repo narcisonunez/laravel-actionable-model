@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-
 use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class ActionableTypeRecord

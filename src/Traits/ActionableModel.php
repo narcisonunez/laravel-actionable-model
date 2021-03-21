@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel\Traits;
 
-
 use Narcisonunez\LaravelActionableModel\ActionableRecordHandler;
 
 trait ActionableModel
