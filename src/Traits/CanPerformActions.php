@@ -24,6 +24,10 @@ trait CanPerformActions
         return (new OwnerActionHandler($this, $actionable));
     }
 
+    /**
+     * @param string $action
+     * @return OwnerActionHandler
+     */
     public function hasPerformedAction(string $action)
     {
         $actionHandler = new OwnerActionHandler();

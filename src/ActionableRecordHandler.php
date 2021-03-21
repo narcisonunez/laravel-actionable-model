@@ -7,7 +7,6 @@ namespace Narcisonunez\LaravelActionableModel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\Action;
 use Illuminate\Support\Collection;
 use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
@@ -41,8 +40,8 @@ class ActionableRecordHandler
      */
     public function by($owner) : self
     {
-        $this->recordsQuery->where('owner_type',  $owner::class)
-            ->where('owner_id',  $owner->id);
+        $this->recordsQuery->where('performed_by_type',  $owner::class)
+            ->where('performed_by_id',  $owner->id);
         return $this;
     }
 
@@ -71,8 +70,8 @@ class ActionableRecordHandler
      */
     public function given(): self
     {
-        $this->recordsQuery->where('owner_type',  $this->target::class)
-            ->where('owner_id',  $this->target->id);
+        $this->recordsQuery->where('performed_by_type',  $this->target::class)
+            ->where('performed_by_id',  $this->target->id);
         return $this;
     }
 

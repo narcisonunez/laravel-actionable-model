@@ -16,7 +16,7 @@ class ActionableRecord extends Model
      */
     public function owner() : BelongsTo
     {
-        return $this->belongsTo($this->owner_type, 'owner_id');
+        return $this->belongsTo($this->performed_by_type, 'performed_by_id');
     }
 
     /**

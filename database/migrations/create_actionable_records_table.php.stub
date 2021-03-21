@@ -10,8 +10,8 @@ class CreateActionableRecordsTable extends Migration
     {
         Schema::create('actionable_records', function (Blueprint $table) {
             $table->id();
-            $table->string('owner_type');
-            $table->unsignedBigInteger('owner_id');
+            $table->string('performed_by_type');
+            $table->unsignedBigInteger('performed_by_id');
             $table->string('actionable_type');
             $table->unsignedBigInteger('actionable_id');
             $table->string('action');

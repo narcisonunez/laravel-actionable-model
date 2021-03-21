@@ -47,8 +47,8 @@ class OwnerActionHandler
         /** @var string $implementation */
         $implementation = $this->actionableActionTypes->get($this->action);
 
-        $record = ActionableRecord::where('owner_type', $this->owner::class)
-            ->where('owner_id',  $this->owner->id)
+        $record = ActionableRecord::where('performed_by_type', $this->owner::class)
+            ->where('performed_by_id',  $this->owner->id)
             ->where('actionable_type',  $actionable::class)
             ->where('actionable_id',  $actionable->id)
             ->first();
@@ -92,8 +92,8 @@ class OwnerActionHandler
     public function createActionRecord(string $name): ActionableRecord
     {
         return ActionableRecord::create([
-            'owner_type' => $this->owner::class,
-            'owner_id' => $this->owner->id,
+            'performed_by_type' => $this->owner::class,
+            'performed_by_id' => $this->owner->id,
             'actionable_type' => $this->actionable::class,
             'actionable_id' => $this->actionable->id,
             'action' => $name
