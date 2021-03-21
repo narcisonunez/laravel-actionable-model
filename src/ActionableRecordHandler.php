@@ -3,10 +3,9 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
@@ -52,6 +51,7 @@ class ActionableRecordHandler
     public function ofType(string $action) : self
     {
         $this->recordsQuery->where('action',  $action);
+
         return $this;
     }
 
@@ -62,6 +62,7 @@ class ActionableRecordHandler
     {
         $this->recordsQuery->where('actionable_type',  $this->target::class)
             ->where('actionable_id',  $this->target->id);
+
         return $this;
     }
 
@@ -72,6 +73,7 @@ class ActionableRecordHandler
     {
         $this->recordsQuery->where('performed_by_type',  $this->target::class)
             ->where('performed_by_id',  $this->target->id);
+
         return $this;
     }
 
@@ -85,7 +87,7 @@ class ActionableRecordHandler
                 $implementation = $this->actionableActionTypes->get($record->action);
 
                 return new $implementation($record);
-        });
+            });
     }
 
     /**

@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel\Tests\Facades;
 
-
 use Narcisonunez\LaravelActionableModel\ActionableActionTypes as ActionableActionTypesImplementation;
 use Narcisonunez\LaravelActionableModel\Facades\ActionableActionTypes;
 use Narcisonunez\LaravelActionableModel\Tests\TestCase;

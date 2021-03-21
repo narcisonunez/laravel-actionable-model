@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-
 use Exception;
 
 class ActionableActionTypes
@@ -20,6 +19,7 @@ class ActionableActionTypes
         foreach ($actions as $key => $implementation) {
             if (is_numeric($key)) {
                 $parsedActions[$implementation] = ActionableTypeRecord::class;
+
                 continue;
             }
 
@@ -27,7 +27,7 @@ class ActionableActionTypes
 
             $parsedActions[$key] = $implementation;
         }
-       $this->actions = $parsedActions;
+        $this->actions = $parsedActions;
     }
 
     /**
@@ -66,11 +66,11 @@ class ActionableActionTypes
      */
     private function validateImplementation(mixed $implementation): void
     {
-        if (!class_exists($implementation)) {
+        if (! class_exists($implementation)) {
             throw new Exception("Class not found. $implementation");
         }
 
-        if (!is_subclass_of($implementation, ActionableTypeRecord::class)) {
+        if (! is_subclass_of($implementation, ActionableTypeRecord::class)) {
             throw new Exception('The implementation should be an instance of ActionableTypeRecord');
         }
     }
