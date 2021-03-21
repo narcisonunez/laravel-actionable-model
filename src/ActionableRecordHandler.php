@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Action;
+use Illuminate\Support\Collection;
 use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class ActionableRecordHandler
@@ -75,17 +76,26 @@ class ActionableRecordHandler
         return $this;
     }
 
-    public function get()
+    /**
+     * Returns a collection of ActionableRecord
+     */
+    public function get() : Collection
     {
-        $records = $this->recordsQuery->get()
+        return $this->recordsQuery->get()
             ->map(function (ActionableRecord $record) {
-            if($implementation = $this->actionableActionTypes->get($record->action)) {
-                return new $implementation($record);
-            }
+                if($implementation = $this->actionableActionTypes->get($record->action)) {
+                    return new $implementation($record);
+                }
 
-            return $record;
+                return $record;
         });
+    }
 
-        dd($records);
+    /**
+     * @return int
+     */
+    public function count() : int
+    {
+        return $this->recordsQuery->count();
     }
 }
