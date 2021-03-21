@@ -4,7 +4,9 @@
 namespace Narcisonunez\LaravelActionableModel\Traits;
 
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Narcisonunez\LaravelActionableModel\Contracts\CanBeActionable;
 use Narcisonunez\LaravelActionableModel\OwnerActionHandler;
 
 trait CanPerformActions
@@ -12,10 +14,13 @@ trait CanPerformActions
     /**
      * @param Model $actionable
      * @return OwnerActionHandler
+     * @throws Exception
      */
     public function performActionOn(Model $actionable): OwnerActionHandler
     {
-        // TODO Check if actionable use the Trait CanBeActionable
+        if (! $actionable instanceof CanBeActionable) {
+            throw new Exception("Model " . get_class($actionable) . " " . CanBeActionable::class);
+        }
         return (new OwnerActionHandler($this, $actionable));
     }
 
