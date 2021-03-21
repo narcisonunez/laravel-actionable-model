@@ -40,11 +40,11 @@ class OwnerActionHandler
 
     /**
      * @param Model $actionable
-     * @return ActionableTypeRecord|bool
+     * @return mixed
      */
-    public function on(Model $actionable) : ActionableTypeRecord|bool
+    public function on(Model $actionable) : mixed
     {
-        /** @var ActionableTypeRecord $implementation */
+        /** @var string $implementation */
         $implementation = $this->actionableActionTypes->get($this->action);
 
         $record = ActionableRecord::where('owner_type', $this->owner::class)
@@ -55,11 +55,17 @@ class OwnerActionHandler
         return ! $record ?: (new $implementation($record));
     }
 
+    /**
+     * @param Model $model
+     */
     public function setOwner(Model $model)
     {
         $this->owner = $model;
     }
 
+    /**
+     * @param string $action
+     */
     public function setAction(string $action)
     {
         $this->action = $action;
@@ -70,21 +76,22 @@ class OwnerActionHandler
      * @param array $arguments
      * @throws Exception
      */
-    public function __call(string $name, array $arguments)
+    public function __call(string $name, array $arguments) : ActionableRecord
     {
         if (! $this->actionableActionTypes->exists($name)) {
             throw new Exception("Invalid Action Type: $name");
         }
 
-        $this->createActionRecord($name);
+        return $this->createActionRecord($name);
     }
 
     /**
      * @param string $name
+     * @return ActionableRecord
      */
-    public function createActionRecord(string $name): void
+    public function createActionRecord(string $name): ActionableRecord
     {
-        ActionableRecord::create([
+        return ActionableRecord::create([
             'owner_type' => $this->owner::class,
             'owner_id' => $this->owner->id,
             'actionable_type' => $this->actionable::class,
