@@ -18,7 +18,7 @@ trait ActionableModel
         return $this
             ->hasMany(ActionableRecord::class, 'performed_by_id', 'id')
             ->where('performed_by_type', $this::class)
-            ->orWhere(function($query){
+            ->orWhere(function ($query) {
                 $query->where('actionable_type', $this::class)
                     ->where('actionable_id', $this->id);
             });
@@ -29,10 +29,12 @@ trait ActionableModel
      */
     public function actionsFilter() : ActionableRecordHandler
     {
-        $actions = $this->actions->map(function($action){
+        $actions = $this->actions->map(function ($action) {
             $implementation = app(ActionableActionTypes::class)->get($action->action);
+
             return new $implementation($action);
         });
+
         return new ActionableRecordHandler($this, $actions);
     }
 }
