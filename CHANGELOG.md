@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-actionable-model` will be documented in this file.
 
+## 1.0.0 - 2021-03-22
+
+- Improve README and keywords
+
 ## 1.1.0 - 2021-03-22
 
 - Now, you can eager load your actions. `User::with('actions')` 
