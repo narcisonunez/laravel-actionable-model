@@ -45,7 +45,7 @@ Now, Any `kudos` action will have a method named `icon`.
 
 Your actions will be used as dynamic method calls. See below.
 
-### Add Traits to your Eloquent Models
+## Traits
 A model that can perform actions you need to include:
 
 ```php
@@ -80,13 +80,13 @@ $user->performActionOn($cause)->kudos();
 $user->performActionOn($cause)->celebrate();
 ```
 
-### Check if the action was already made
+## Check if the action was already made
 ```php
 // returns False or an ActionableTypeRecord
 $user->hasPerformedAction('like')->on($cause);
 ```
 
-### Toggle your actions
+## Toggle your actions
 ```php
 // remove if exists the action, otherwise creates a new like
 $user->performActionOn($cause)->toggle('like');
@@ -97,21 +97,24 @@ $user->performActionOn($cause)->toggleKudos();
 $user->performActionOn($cause)->toggleCelebrate(); 
 ```
 
-### Manually delete an action (See Toggle above)
+## Manually delete an action (See Toggle above)
 ```php
 if ($action  = $user->hasPerformedAction('like')->on($cause) ) {
     $action->delete();
 }
 ```
 
-### Get all the actions
+## Get all the actions
 ```php
-$user->actions()->get();
-$user->actions()->given()->get();
-$user->actions()->received()->get();
-$user->actions()->ofType('like')->get();
-$cause->actions()->by($user)->ofType('like')->get();
-$cause->actions()->by($user)->ofType('like')->count();
+$user->actions;
+
+// To help you out filtering your actions. You can use the actionsFilter method
+$user->actionsFilter()->get();
+$user->actionsFilter()->given()->get();
+$user->actionsFilter()->received()->get();
+$user->actionsFilter()->ofType('like')->get();
+$cause->actionsFilter()->by($user)->ofType('like')->get();
+$cause->actionsFilter()->by($user)->ofType('like')->count();
 ```
 
 #### - Available methods -
@@ -128,7 +131,7 @@ $cause->actions()->by($user)->ofType('like')->count();
 The methods above will return a collection of `ActionableRecord`.  
 The access the owner or the actionable models, you can do it like this:
 ```php
-$actionRecord = $user->actions()->ofType('like')->get()->first();
+$actionRecord = $user->actionsHandler()->ofType('like')->get()->first();
 
 $actionRecord->owner; // The model that performed the action
 $actionRecord->actionable; // The model that received the action

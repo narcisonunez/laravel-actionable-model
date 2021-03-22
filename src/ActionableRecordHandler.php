@@ -3,11 +3,8 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class ActionableRecordHandler
 {
@@ -17,25 +14,14 @@ class ActionableRecordHandler
     protected Model $target;
 
     /**
-     * @var Builder
+     * @var Collection
      */
-    protected Builder $recordsQuery;
+    protected Collection $actions;
 
-    /**
-     * @var Application|mixed|ActionableActionTypes
-     */
-    protected $actionableActionTypes;
-
-    /**
-     * @var bool
-     */
-    protected bool $requestAll = true;
-
-    public function __construct($target)
+    public function __construct($target, $actions)
     {
         $this->target = $target;
-        $this->actionableActionTypes = app(ActionableActionTypes::class);
-        $this->recordsQuery = ActionableRecord::query();
+        $this->actions = $actions;
     }
 
     /**
@@ -44,9 +30,8 @@ class ActionableRecordHandler
      */
     public function by($owner) : self
     {
-        $this->requestAll = false;
-        $this->recordsQuery->where('performed_by_type',  $owner::class)
-            ->where('performed_by_id',  $owner->id);
+        $this->actions = $this->actions->where('target.performed_by_type', $owner::class)
+            ->where('target.performed_by_id', $owner->id);
 
         return $this;
     }
@@ -57,7 +42,7 @@ class ActionableRecordHandler
      */
     public function ofType(string $action) : self
     {
-        $this->recordsQuery->where('action',  $action);
+        $this->actions = $this->actions->where('target.action',  $action);
 
         return $this;
     }
@@ -67,9 +52,8 @@ class ActionableRecordHandler
      */
     public function received(): self
     {
-        $this->requestAll = false;
-        $this->recordsQuery->where('actionable_type',  $this->target::class)
-            ->where('actionable_id',  $this->target->id);
+        $this->actions = $this->actions->where('target.actionable_type',  $this->target::class)
+            ->where('target.actionable_id',  $this->target->id);
 
         return $this;
     }
@@ -79,9 +63,8 @@ class ActionableRecordHandler
      */
     public function given(): self
     {
-        $this->requestAll = false;
-        $this->recordsQuery->where('performed_by_type',  $this->target::class)
-            ->where('performed_by_id',  $this->target->id);
+        $this->actions = $this->actions->where('target.performed_by_type',  $this->target::class)
+            ->where('target.performed_by_id',  $this->target->id);
 
         return $this;
     }
@@ -91,14 +74,7 @@ class ActionableRecordHandler
      */
     public function get() : Collection
     {
-        $this->prepareQuery();
-
-        return $this->recordsQuery->get()
-            ->map(function (ActionableRecord $record) {
-                $implementation = $this->actionableActionTypes->get($record->action);
-
-                return new $implementation($record);
-            });
+        return $this->actions;
     }
 
     /**
@@ -106,23 +82,6 @@ class ActionableRecordHandler
      */
     public function count() : int
     {
-        $this->prepareQuery();
-
-        return $this->recordsQuery->count();
-    }
-
-    /**
-     * Get all the records for an specific model
-     */
-    private function prepareQuery()
-    {
-        if ($this->requestAll) {
-            $this->recordsQuery->where('performed_by_type',  $this->target::class)
-                ->where('performed_by_id',  $this->target->id)
-                ->orWhere(function ($query) {
-                    $query->where('actionable_type',  $this->target::class)
-                        ->where('actionable_id',  $this->target->id);
-                });
-        }
+        return $this->actions->count();
     }
 }
