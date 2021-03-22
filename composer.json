@@ -2,6 +2,10 @@
     "name": "narcisonunez/laravel-actionable-model",
     "description": "Allow actions in your laravel model",
     "keywords": [
+        "eloquent",
+        "like",
+        "laravel",
+        "favorite",
         "narcisonunez",
         "laravel-actionable-model"
     ],
