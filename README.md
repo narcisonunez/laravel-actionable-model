@@ -110,6 +110,7 @@ $user->actions;
 
 // To help you out filtering your actions. You can use the actionsFilter method
 $user->actionsFilter()->get();
+$user->actionsFilter()->latest(10);
 $user->actionsFilter()->given()->get();
 $user->actionsFilter()->received()->get();
 $user->actionsFilter()->ofType('like')->get();
@@ -126,12 +127,13 @@ $cause->actionsFilter()->by($user)->ofType('like')->count();
 | received | Filters all the records where the current model received the actions |
 | ofType | Filters by the actionType|
 | by | Filters all the actions in the current model where the model passed to this method performed the action |
+| latest | Get the collection sorted by the latest ones. |
 
 ### Actionable Record
 The methods above will return a collection of `ActionableRecord`.  
 The access the owner or the actionable models, you can do it like this:
 ```php
-$actionRecord = $user->actionsHandler()->ofType('like')->get()->first();
+$actionRecord = $user->actionsFilter()->ofType('like')->get()->first();
 
 $actionRecord->owner; // The model that performed the action
 $actionRecord->actionable; // The model that received the action
