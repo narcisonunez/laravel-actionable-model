@@ -2,7 +2,11 @@
 
 All notable changes to `laravel-actionable-model` will be documented in this file.
 
-## 1.0.0 - 2021-03-22
+## 1.2.0 - 2021-03-22
+
+- Add `latest` method to the actionsFilter
+
+## 1.1.1 - 2021-03-22
 
 - Improve README and keywords
 
