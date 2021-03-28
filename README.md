@@ -139,28 +139,10 @@ $actionRecord->owner; // The model that performed the action
 $actionRecord->actionable; // The model that received the action
 ```
 
-## Testing
+## 💖 Support the development
+**Do you like this project? Support it by donating**
 
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Narciso Nunez](https://github.com/narcisonunez)
-- [All Contributors](../../contributors)
+- PayPal: [Donate](https://www.paypal.com/donate?hosted_button_id=AHCCCPMWR66YL)
 
 ## License
 
