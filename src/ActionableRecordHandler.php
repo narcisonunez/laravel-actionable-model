@@ -84,7 +84,7 @@ class ActionableRecordHandler
      */
     public function latest($limit = 10) : Collection
     {
-        return $this->actions->sortByDesc(function ($action){
+        return $this->actions->sortByDesc(function ($action) {
             return $action->created_at;
         })->take($limit);
     }
