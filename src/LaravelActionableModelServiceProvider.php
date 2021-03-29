@@ -25,5 +25,9 @@ class LaravelActionableModelServiceProvider extends PackageServiceProvider
         $this->app->singleton(ActionableActionTypes::class, function () {
             return new ActionableActionTypes();
         });
+
+        $this->app->singleton(ActionableModelAliases::class, function () {
+            return new ActionableModelAliases();
+        });
     }
 }

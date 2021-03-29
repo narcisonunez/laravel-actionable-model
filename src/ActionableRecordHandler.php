@@ -18,10 +18,16 @@ class ActionableRecordHandler
      */
     protected Collection $actions;
 
+    /**
+     * @var ActionableModelAliases
+     */
+    protected ActionableModelAliases $aliasHandler;
+
     public function __construct($target, $actions)
     {
         $this->target = $target;
         $this->actions = $actions;
+        $this->aliasHandler = app(ActionableModelAliases::class);
     }
 
     /**
@@ -30,7 +36,8 @@ class ActionableRecordHandler
      */
     public function by($owner) : self
     {
-        $this->actions = $this->actions->where('target.performed_by_type', $owner::class)
+        $this->actions = $this->actions
+            ->where('target.performed_by_type', $this->aliasHandler->get($owner::class))
             ->where('target.performed_by_id', $owner->id);
 
         return $this;
@@ -52,7 +59,8 @@ class ActionableRecordHandler
      */
     public function received(): self
     {
-        $this->actions = $this->actions->where('target.actionable_type',  $this->target::class)
+        $this->actions = $this->actions
+            ->where('target.actionable_type', $this->getTargetAlias())
             ->where('target.actionable_id',  $this->target->id);
 
         return $this;
@@ -63,7 +71,8 @@ class ActionableRecordHandler
      */
     public function given(): self
     {
-        $this->actions = $this->actions->where('target.performed_by_type',  $this->target::class)
+        $this->actions = $this->actions
+            ->where('target.performed_by_type',  $this->getTargetAlias())
             ->where('target.performed_by_id',  $this->target->id);
 
         return $this;
@@ -95,5 +104,13 @@ class ActionableRecordHandler
     public function count() : int
     {
         return $this->actions->count();
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetAlias() : string
+    {
+        return $this->aliasHandler->get($this->target::class);
     }
 }

@@ -5,17 +5,30 @@ namespace Narcisonunez\LaravelActionableModel\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Narcisonunez\LaravelActionableModel\ActionableModelAliases;
 
 class ActionableRecord extends Model
 {
     protected $guarded = [];
 
     /**
+     * @var ActionableModelAliases
+     */
+    protected ActionableModelAliases $aliasHandler;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->aliasHandler = app(ActionableModelAliases::class);
+    }
+
+    /**
      * @return BelongsTo
      */
     public function owner() : BelongsTo
     {
-        return $this->belongsTo($this->performed_by_type, 'performed_by_id');
+        $model = $this->aliasHandler->model($this->performed_by_type);
+        return $this->belongsTo($model, 'performed_by_id');
     }
 
     /**
@@ -23,6 +36,7 @@ class ActionableRecord extends Model
      */
     public function actionable() : BelongsTo
     {
-        return $this->belongsTo($this->actionable_type, 'actionable_id');
+        $model = $this->aliasHandler->model($this->actionable_type);
+        return $this->belongsTo($model, 'actionable_id');
     }
 }

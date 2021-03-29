@@ -32,11 +32,17 @@ class OwnerActionHandler
      */
     protected $actionableActionTypes;
 
+    /**
+     * @var ActionableModelAliases
+     */
+    protected ActionableModelAliases $aliasHandler;
+
     public function __construct($owner = null, $actionable = null)
     {
         $this->owner = $owner;
         $this->actionable = $actionable;
         $this->actionableActionTypes = app(ActionableActionTypes::class);
+        $this->aliasHandler = app(ActionableModelAliases::class);
     }
 
     /**
@@ -48,9 +54,9 @@ class OwnerActionHandler
         /** @var string $implementation */
         $implementation = $this->actionableActionTypes->get($this->action);
 
-        $record = ActionableRecord::where('performed_by_type', $this->owner::class)
+        $record = ActionableRecord::where('performed_by_type', $this->getOwnerAlias())
             ->where('performed_by_id', $this->owner->id)
-            ->where('actionable_type', $actionable::class)
+            ->where('actionable_type', $this->aliasHandler->get($actionable::class))
             ->where('actionable_id', $actionable->id)
             ->where('action', $this->action)
             ->first();
@@ -120,9 +126,9 @@ class OwnerActionHandler
     public function createActionRecord(string $name): ActionableRecord
     {
         return ActionableRecord::create([
-            'performed_by_type' => $this->owner::class,
+            'performed_by_type' => $this->getOwnerAlias(),
             'performed_by_id' => $this->owner->id,
-            'actionable_type' => $this->actionable::class,
+            'actionable_type' => $this->aliasHandler->get($this->actionable::class),
             'actionable_id' => $this->actionable->id,
             'action' => $name,
         ]);
@@ -134,9 +140,9 @@ class OwnerActionHandler
      */
     public function getRecordsForAction($action) : Collection | null
     {
-        return ActionableRecord::where('performed_by_type', $this->owner::class)
+        return ActionableRecord::where('performed_by_type', $this->getOwnerAlias())
             ->where('performed_by_id', $this->owner->id)
-            ->where('actionable_type', $this->actionable::class)
+            ->where('actionable_type', $this->aliasHandler->get($this->actionable::class))
             ->where('actionable_id', $this->actionable->id)
             ->where('action', $action)
             ->get();
@@ -151,5 +157,13 @@ class OwnerActionHandler
         if (! $this->actionableActionTypes->exists($name)) {
             throw new Exception("Invalid Action Type: $name");
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerAlias(): string
+    {
+        return $this->aliasHandler->get($this->owner::class);
     }
 }
