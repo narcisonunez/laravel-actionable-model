@@ -3,6 +3,7 @@
 namespace Narcisonunez\LaravelActionableModel;
 
 use Narcisonunez\LaravelActionableModel\Commands\MakeActionTypeCommand;
+use Narcisonunez\LaravelActionableModel\Commands\UpdateModelsToAliases;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,7 +20,8 @@ class LaravelActionableModelServiceProvider extends PackageServiceProvider
             ->name('laravel-actionable-model')
             ->hasMigration('create_actionable_records_table')
             ->hasCommands([
-                MakeActionTypeCommand::class
+                MakeActionTypeCommand::class,
+                UpdateModelsToAliases::class
             ]);
 
         $this->app->singleton(ActionableActionTypes::class, function () {

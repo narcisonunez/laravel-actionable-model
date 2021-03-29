@@ -21,6 +21,14 @@ class ActionableModelAliases
 
 
     /**
+     * @return array
+     */
+    public function all() : array
+    {
+        return $this->aliases;
+    }
+
+    /**
      * @param string $model
      * @return mixed
      */
