@@ -39,4 +39,13 @@ class ActionableRecord extends Model
         $model = $this->aliasHandler->model($this->actionable_type);
         return $this->belongsTo($model, 'actionable_id');
     }
+
+    /**
+     * Alias for the action attribute
+     * @return string
+     */
+    public function getTypeAttribute() : string
+    {
+        return $this->attributes['action'];
+    }
 }

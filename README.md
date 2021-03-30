@@ -45,6 +45,38 @@ Now, Any `kudos` action will have a method named `icon`.
 
 Your actions will be used as dynamic method calls. See below.
 
+### Create a new Actionable Action Type (OPTIONAL)
+```php
+php artisan actionable:type LikeActionType
+```
+
+### Add aliases to your models (OPTIONAL)
+
+Add your aliases in your `AppServiceProvider`
+
+```php
+use App\Models\Cause;
+use App\Models\User;
+use Narcisonunez\LaravelActionableModel\Facades\ActionableModelAliases;
+
+ActionableModelAliases::register([
+    User::class => 'user',
+    Cause::class => 'cause'
+]);
+``` 
+
+Storing aliases in the database will prevent losing the reference if you move your models to another directory.
+
+### Update existing models references to use the new alias
+
+In case you already have data in the database, after adding the aliases you can run:  
+
+```php
+php artisan actionable:update-aliases
+```
+
+To update all your existing records.
+
 ## Traits
 A model that can perform actions you need to include:
 
@@ -137,6 +169,8 @@ $actionRecord = $user->actionsFilter()->ofType('like')->get()->first();
 
 $actionRecord->owner; // The model that performed the action
 $actionRecord->actionable; // The model that received the action
+$actionRecord->action; // Action that was performed. ex. like, kudos, celebrate, etc.
+$actionRecord->type; // An alias to action
 ```
 
 ## 💖 Support the development
