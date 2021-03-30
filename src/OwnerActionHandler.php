@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Narcisonunez\LaravelActionableModel\Events\ActionOccurred;
 use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class OwnerActionHandler
@@ -91,7 +92,10 @@ class OwnerActionHandler
 
         if ($records->isNotEmpty()) {
             $recordsCount = $records->count();
-            $records->map->delete();
+            $records->map(function ($record) {
+                ActionOccurred::dispatch($record, 'delete');
+                $record->delete();
+            });
 
             return $recordsCount;
         }
@@ -125,13 +129,15 @@ class OwnerActionHandler
      */
     public function createActionRecord(string $name): ActionableRecord
     {
-        return ActionableRecord::create([
+        $record = ActionableRecord::create([
             'performed_by_type' => $this->getOwnerAlias(),
             'performed_by_id' => $this->owner->id,
             'actionable_type' => $this->aliasHandler->get($this->actionable::class),
             'actionable_id' => $this->actionable->id,
             'action' => $name,
         ]);
+        ActionOccurred::dispatch($record, 'create');
+        return $record;
     }
 
     /**
