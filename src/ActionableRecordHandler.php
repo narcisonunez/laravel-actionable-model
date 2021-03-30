@@ -5,6 +5,7 @@ namespace Narcisonunez\LaravelActionableModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class ActionableRecordHandler
 {
@@ -96,6 +97,22 @@ class ActionableRecordHandler
         return $this->actions->sortByDesc(function ($action) {
             return $action->created_at;
         })->take($limit);
+    }
+
+    /**
+     * @return ActionableTypeRecord
+     */
+    public function first() : ActionableTypeRecord
+    {
+        return $this->actions->first();
+    }
+
+    /**
+     * @return ActionableTypeRecord
+     */
+    public function last() : ActionableTypeRecord
+    {
+        return $this->latest(1)->first();
     }
 
     /**

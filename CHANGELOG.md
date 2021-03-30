@@ -7,6 +7,7 @@ All notable changes to `laravel-actionable-model` will be documented in this fil
 - Add `actionable:type` command to create an actionType class.
 - Add Aliases to your Actionable Models. `App\Models\User` => `user`.
 - Add `actionable:update-aliases` command to update all the current records using the model path to use the aliases.
+- Add new `first` and `last` method to the actionsFilter
 
 ## 1.2.0 - 2021-03-22
 
