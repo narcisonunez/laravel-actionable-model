@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel\Commands;
 
-
 use Illuminate\Console\GeneratorCommand;
 
 class MakeActionTypeCommand extends GeneratorCommand
@@ -50,4 +49,3 @@ class MakeActionTypeCommand extends GeneratorCommand
         return "App\\ActionTypes";
     }
 }
-

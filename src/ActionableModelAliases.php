@@ -3,7 +3,6 @@
 
 namespace Narcisonunez\LaravelActionableModel;
 
-
 class ActionableModelAliases
 {
     /**
@@ -18,7 +17,6 @@ class ActionableModelAliases
     {
         $this->aliases = $aliases;
     }
-
 
     /**
      * @return array
@@ -44,7 +42,7 @@ class ActionableModelAliases
     public function model(string $alias) : string
     {
         return collect($this->aliases)
-            ->filter(function($item) use ($alias){
+            ->filter(function ($item) use ($alias) {
                 return $item === $alias;
             })->keys()->first() ?: $alias;
     }

@@ -137,6 +137,7 @@ class OwnerActionHandler
             'action' => $name,
         ]);
         ActionOccurred::dispatch($record, 'create');
+
         return $record;
     }
 
