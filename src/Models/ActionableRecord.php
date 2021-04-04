@@ -6,6 +6,7 @@ namespace Narcisonunez\LaravelActionableModel\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Narcisonunez\LaravelActionableModel\ActionableModelAliases;
+use Narcisonunez\LaravelActionableModel\Events\ActionOccurred;
 
 class ActionableRecord extends Model
 {
@@ -20,6 +21,17 @@ class ActionableRecord extends Model
     {
         parent::__construct($attributes);
         $this->aliasHandler = app(ActionableModelAliases::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function(ActionableRecord $actionableRecord) {
+            ActionOccurred::dispatch($actionableRecord, 'create');
+        });
+
+        static::deleted(function(ActionableRecord $actionableRecord) {
+            ActionOccurred::dispatch($actionableRecord, 'delete');
+        });
     }
 
     /**
