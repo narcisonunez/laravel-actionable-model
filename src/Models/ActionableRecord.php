@@ -40,6 +40,7 @@ class ActionableRecord extends Model
     public function owner() : BelongsTo
     {
         $model = $this->aliasHandler->model($this->performed_by_type);
+
         return $this->belongsTo($model, 'performed_by_id');
     }
 
@@ -49,6 +50,7 @@ class ActionableRecord extends Model
     public function actionable() : BelongsTo
     {
         $model = $this->aliasHandler->model($this->actionable_type);
+
         return $this->belongsTo($model, 'actionable_id');
     }
 

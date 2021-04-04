@@ -21,7 +21,7 @@ class LaravelActionableModelServiceProvider extends PackageServiceProvider
             ->hasMigration('create_actionable_records_table')
             ->hasCommands([
                 MakeActionTypeCommand::class,
-                UpdateModelsToAliases::class
+                UpdateModelsToAliases::class,
             ]);
 
         $this->app->singleton(ActionableActionTypes::class, function () {
