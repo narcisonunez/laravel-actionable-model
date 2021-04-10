@@ -72,7 +72,11 @@ Storing aliases in the database will prevent losing the reference if you move yo
 In case you already have data in the database, after adding the aliases you can run:  
 
 ```php
-php artisan actionable:update-aliases
+php artisan actionable:update-aliases // Update all the records
+```
+If you want just to update a specific value
+```php
+php artisan actionable:update-aliases --from="App\\User" --to="App\\Models\\User"
 ```
 
 To update all your existing records.

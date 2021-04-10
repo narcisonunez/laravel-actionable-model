@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-actionable-model` will be documented in this file.
 
+## 1.3.2 - 2021-03-31
+
+- Add support for updating just a specific alias
+- Code refactoring
+
 ## 1.3.0 - 2021-03-31
 
 - Add `actionable:type` command to create an actionType class.

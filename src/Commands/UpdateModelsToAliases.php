@@ -9,7 +9,7 @@ use Narcisonunez\LaravelActionableModel\Models\ActionableRecord;
 
 class UpdateModelsToAliases extends Command
 {
-    public $signature = 'actionable:update-aliases';
+    public $signature = 'actionable:update-aliases {--from= : Existing model path} {--to= : Model alias}';
 
     public $description = 'Update current database records to use the alias instead of the model path';
 
@@ -18,7 +18,14 @@ class UpdateModelsToAliases extends Command
      */
     public function handle()
     {
-        foreach (ActionableModelAliases::all() as $model => $alias) {
+        $aliases = ActionableModelAliases::all();
+
+        if ($this->hasOption('from') && $this->hasOption('to')) {
+            $aliases = [];
+            $aliases[$this->option('from')] = $this->option('to');
+        }
+
+        foreach ($aliases as $model => $alias) {
             ActionableRecord::where('performed_by_type', $model)->update([
                 'performed_by_type' => $alias,
             ]);
