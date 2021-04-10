@@ -25,11 +25,11 @@ class ActionableRecord extends Model
 
     protected static function booted()
     {
-        static::created(function(ActionableRecord $actionableRecord) {
+        static::created(function (ActionableRecord $actionableRecord) {
             ActionOccurred::dispatch($actionableRecord, 'create');
         });
 
-        static::deleted(function(ActionableRecord $actionableRecord) {
+        static::deleted(function (ActionableRecord $actionableRecord) {
             ActionOccurred::dispatch($actionableRecord, 'delete');
         });
     }
